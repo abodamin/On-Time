@@ -124,13 +124,14 @@ class _BusArrivingTimeState extends State<BusArrivingTime> {
     _startingTime = _currentTime.subtract(Duration(days: 1));
     _endTime = _currentTime.add(Duration(days: 1));
     _generateMockTimes(_startingTime, _endTime); //automatically will be assigned to mockTimes.
+    _nextBus = _getNextBusTime();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('$_currentTime');
-    _nextBus = _getNextBusTime();
+    // print('$_currentTime');
+    
 
     return SingleChildScrollView(
       child: Container(
@@ -163,7 +164,7 @@ class _BusArrivingTimeState extends State<BusArrivingTime> {
       if( _myTimings.elementAt(i).isAfter(_currentTime)){
         setState(() {
         //  _nextBus = DateFormat.Hm(_myTimings.elementAt(i));
-         _nextBus = DateFormat('kk:mm').format(_myTimings.elementAt(++i%_myTimings.length));
+         return _nextBus = DateFormat('kk:mm').format(_myTimings.elementAt(++i%_myTimings.length));
         // _nextBus = _myTimings.elementAt(i);
         });
       }
@@ -175,8 +176,9 @@ class _BusArrivingTimeState extends State<BusArrivingTime> {
   void _generateMockTimes(DateTime startingTime, DateTime endTime) {
     _mockTimes = new List<DateTime>();
     // _myMockTimings.clear();
-   
-    var _start = DateTime.parse("2012-02-27 13:27:00"); //just two houres before current time.
+   //TODO: use DateTame.now() then just take the Date and Append the rest as 00:00. to be used as starting time.
+    var _start = DateTime.parse("2020-03-01T14Z"); //just two houres before current time.
+    print('_________start : $_start : type is : ${_start.runtimeType}');
     _myTimings.add(_start);
     //this method calls mockDate as many times we want (50) to fill our bus arriving times table.
     for (int i = 0; i < 50; i++) {
@@ -186,7 +188,8 @@ class _BusArrivingTimeState extends State<BusArrivingTime> {
       _myTimings.add(_start);//use new Value of _start.
     }
     // _mockTimes.forEach((f)=> print(f));
-    print('_start : $_start');
+    // print('_start : $_start');
+    _myTimings.forEach((f)=> print('**$f'));
 
   }
 }

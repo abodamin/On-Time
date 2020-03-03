@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:mock_data/mock_data.dart';
 
 void main() => runApp(MyApp());
 
@@ -103,93 +102,59 @@ class BusArrivingTime extends StatefulWidget {
 }
 
 class _BusArrivingTimeState extends State<BusArrivingTime> {
-  List<String> _arrivingTimes;
-   List<DateTime> _myTimings = List<DateTime>();//
-  // _arrivingTimes =
-  //     "02:30,03:29,03:54,04:36,04:59,05:20,05:30,05:55,06:10,06:20,06:50,07:10,07:21,07:44,07:53,08:05,08:20,08:40,08:50,08:58,09:00,09:08,09:20,09:26,9:33,9:43,9:51,10:00,10:05,10:10,10:11,10:15,10:25,10:56,11:06,11:10,11:20,11:27,11:35,11:40,11:55,11:55,11:59"
-  //         .split(',')
-  //         .toList();
-  List<String> _myMockTimings = "2020-02-28 1:00:58.921456 , 2020-02-28 1:16:58.921456, 2020-02-28 1:26:58.921456 , 2020-02-28 1:46:58.921456 , 2020-02-28 2:00:58.921456 , 2020-02-28 2:16:58.921456, 2020-02-28 2:26:58.921456 , 2020-02-28 2:46:58.921456 , 2020-02-28 3:00:58.921456 , 2020-02-28 3:16:58.921456, 2020-02-28 3:26:58.921456 , 2020-02-28 3:46:58.921456 , 2020-02-28 4:00:58.921456 , 2020-02-28 4:16:58.921456, 2020-02-28 4:26:58.921456 , 2020-02-28 4:46:58.921456 , 2020-02-28 5:00:58.921456 , 2020-02-28 5:16:58.921456, 2020-02-28 5:26:58.921456 , 2020-02-28 5:46:58.921456 , 2020-02-28 6:00:58.921456 , 2020-02-28 6:16:58.921456, 2020-02-28 6:26:58.921456 , 2020-02-28 6:46:58.921456 , 2020-02-28 7:00:58.921456 , 2020-02-28 7:16:58.921456, 2020-02-28 7:26:58.921456 , 2020-02-28 7:46:58.921456 , 2020-02-28 8:00:58.921456 , 2020-02-28 8:16:58.921456, 2020-02-28 8:26:58.921456 , 2020-02-28 8:46:58.921456, 2020-02-28 9:00:58.921456 , 2020-02-28 9:16:58.921456, 2020-02-28 9:26:58.921456 , 2020-02-28 9:46:58.921456, 2020-02-28 10:00:58.921456 , 2020-02-28 10:16:58.921456, 2020-02-28 10:26:58.921456 , 2020-02-28 10:46:58.921456, 2020-02-28 11:00:58.921456 , 2020-02-28 11:16:58.921456, 2020-02-28 11:26:58.921456 , 2020-02-28 11:46:58.921456 ".split(',').toList();
-  
-  List<DateTime> _mockTimes;
+   
+   List<DateTime> _busTimings = List<DateTime>();
+  // List<String> _myMockTimings = "2020-02-28 1:00:58.921456 , 2020-02-28 1:16:58.921456, 2020-02-28 1:26:58.921456 , 2020-02-28 1:46:58.921456 , 2020-02-28 2:00:58.921456 , 2020-02-28 2:16:58.921456, 2020-02-28 2:26:58.921456 , 2020-02-28 2:46:58.921456 , 2020-02-28 3:00:58.921456 , 2020-02-28 3:16:58.921456, 2020-02-28 3:26:58.921456 , 2020-02-28 3:46:58.921456 , 2020-02-28 4:00:58.921456 , 2020-02-28 4:16:58.921456, 2020-02-28 4:26:58.921456 , 2020-02-28 4:46:58.921456 , 2020-02-28 5:00:58.921456 , 2020-02-28 5:16:58.921456, 2020-02-28 5:26:58.921456 , 2020-02-28 5:46:58.921456 , 2020-02-28 6:00:58.921456 , 2020-02-28 6:16:58.921456, 2020-02-28 6:26:58.921456 , 2020-02-28 6:46:58.921456 , 2020-02-28 7:00:58.921456 , 2020-02-28 7:16:58.921456, 2020-02-28 7:26:58.921456 , 2020-02-28 7:46:58.921456 , 2020-02-28 8:00:58.921456 , 2020-02-28 8:16:58.921456, 2020-02-28 8:26:58.921456 , 2020-02-28 8:46:58.921456, 2020-02-28 9:00:58.921456 , 2020-02-28 9:16:58.921456, 2020-02-28 9:26:58.921456 , 2020-02-28 9:46:58.921456, 2020-02-28 10:00:58.921456 , 2020-02-28 10:16:58.921456, 2020-02-28 10:26:58.921456 , 2020-02-28 10:46:58.921456, 2020-02-28 11:00:58.921456 , 2020-02-28 11:16:58.921456, 2020-02-28 11:26:58.921456 , 2020-02-28 11:46:58.921456 ".split(',').toList();
   var _currentTime;
   var _nextBus;
-  DateTime _endTime;
   DateTime _startingTime;
 
   @override
   void initState() {
-    //generate Mock Dates as the bus arriving time.
-    _currentTime = DateTime.now();
-    _startingTime = _currentTime.subtract(Duration(days: 1));
-    _endTime = _currentTime.add(Duration(days: 1));
-    _generateMockTimes(_startingTime, _endTime); //automatically will be assigned to mockTimes.
+    _currentTime = DateTime.now(); //take the current time
+    print('_currentTime : $_currentTime');//just print it
+    _generateBusArrivingTimes(_startingTime); //automatically will be assigned to mockTimes.
     _nextBus = _getNextBusTime();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print('$_currentTime');
-    
-
     return SingleChildScrollView(
       child: Container(
-        child: Column(children: <Widget>[
-          Text('This bus arrives at : ${_nextBus}'),
-        ]),
+        child: Column(
+          children: <Widget>[
+          Text('This bus arrives at : $_nextBus'),
+         ],
+        ),
       ),
     );
   }
 
-  _getNextBusTime() {
-    var temp;
-    // "2020-02-28 1:00:58.921456"
-//     _myMockTimings.forEach((f){
-//       String date = f;
-// String dateWithT = date.substring(0, 10) + 'T' + date.substring(11);
-// DateTime dateTime = DateTime.parse(dateWithT);
-// print(dateTime);
-//     });
-
-//     for(int i=0; i < _myMockTimings.length; i++ ){
-//       temp = DateTime.parse(_myMockTimings.elementAt(i).trim());
-//       if( ! _currentTime.isAfter(temp) ){
-//         //if true take the previous one
-//         _nextBus = temp;
-//       }
-//     }
-    for(int i=0; i<_myTimings.length; i++){
-      // print('${_myTimings.elementAt(i)} , type is : ${_myTimings.elementAt(i).runtimeType}');//checked it is all DateTime Type
-      if( _myTimings.elementAt(i).isAfter(_currentTime)){
-        setState(() {
-        //  _nextBus = DateFormat.Hm(_myTimings.elementAt(i));
-         return _nextBus = DateFormat('kk:mm').format(_myTimings.elementAt(++i%_myTimings.length));
-        // _nextBus = _myTimings.elementAt(i);
-        });
+  String _getNextBusTime() {
+    for(int i=0; i<_busTimings.length; i++){
+      _nextBus = _busTimings.first;// default value is first element.
+      if( _busTimings.elementAt(i).isAfter(_currentTime)){
+        print('inside IF STATEMENT $i');
+        var temp = _busTimings.elementAt(i);
+        return DateFormat('kk:mm').format(temp);
       }
     }
     return _nextBus;
   }
 
 
-  void _generateMockTimes(DateTime startingTime, DateTime endTime) {
-    _mockTimes = new List<DateTime>();
-    // _myMockTimings.clear();
-   //TODO: use DateTame.now() then just take the Date and Append the rest as 00:00. to be used as starting time.
-    var _start = DateTime.parse("2020-03-01T14Z"); //just two houres before current time.
-    print('_________start : $_start : type is : ${_start.runtimeType}');
-    _myTimings.add(_start);
-    //this method calls mockDate as many times we want (50) to fill our bus arriving times table.
-    for (int i = 0; i < 50; i++) {
-      // _mockTimes.add(mockDate(startingTime, endTime));
-      var addedTime = _start.add(Duration(minutes: 15 )); //add 15 minutes
-      _start = addedTime; //add then assign the new value.
-      _myTimings.add(_start);//use new Value of _start.
+  void _generateBusArrivingTimes(DateTime startingTime) {
+    DateTime _start;
+    _start = _currentTime.subtract(Duration(hours: 2));//just Start before two houres from now. 
+    _busTimings.add(_start);
+    print('_________start : $_start');
+    //each hour has 4 quarters (4*15) = 1 houre, day has 24 houres so.. .(4*24)=96 this means we have 96 quarters per day but we don't want to start at 12 for example and end at 12, we want to start at 12 and end at 11:45 that's why we used 95 (96 - 1 = 95).
+    for (int i = 0; i < 95; i++) {
+      _start = _start.add( Duration(minutes: 15) ); //add 15 minutes then update the value of _start NOTE: this add is like plus "+"
+      _busTimings.add(_start); //NOTE: this add means 'add' to List<>.
     }
-    // _mockTimes.forEach((f)=> print(f));
-    // print('_start : $_start');
-    _myTimings.forEach((f)=> print('**$f'));
-
+    _busTimings.forEach((f)=> print('**$f'));
+    print('\n');
   }
 }

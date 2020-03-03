@@ -26,6 +26,7 @@ class _MyAppState extends State<MyApp> {
   LatLng _userPosition;
   Uint8List byteData;
   Set<Marker> _markers;
+  Set<Circle> _circle;
   List<String> _randomLocations =
       '24.86146928,46.69903575,24.88316324,46.69854317,24.93996718,46.76643857,24.6993607,46.56438094,24.69793692,46.69062082,24.63449564,46.69748834,24.79167131,46.59003239,24.80303949,46.72174665,24.63893682,46.72256229,24.7844077,46.84134829,24.67704144,46.79674636,24.64808747,46.6998683,24.6202194,46.71829173,24.73029649,46.67289744,24.82366259,46.63587723,24.93323531,46.66575324,24.80882471,46.56780604,24.71954391,46.76374092,24.62784976,46.7145642'
           .split(',')
@@ -83,10 +84,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Maps Sample App'),
+          title: Text('OnTime'),
           backgroundColor: Colors.green[700],
         ),
-        floatingActionButton: FloatingActionButton(onPressed: () async {
+        floatingActionButton: FloatingActionButton(
+          
+          onPressed: () async {
+          _circle = {};
           await getUserLocation();
           setState(() {
             _markers.add(Marker(
@@ -94,11 +98,24 @@ class _MyAppState extends State<MyApp> {
               position: _userPosition,
               icon: BitmapDescriptor.fromBytes(byteData),
             ));
+            _circle.add(
+              Circle(
+                circleId: CircleId('userCircleId'),
+                center: _userPosition,
+                radius: _locationData.accuracy*30,
+                visible: true,
+                strokeWidth: 3,
+                strokeColor: Colors.blue,
+                fillColor: Colors.blue[100],
+                
+                ),
+            );
           });
         }),
         body: Stack(
           children: <Widget>[
             GoogleMap(
+              circles: Set.of((_circle != null? [_circle.first] : [] )),
               markers: _markers,
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(

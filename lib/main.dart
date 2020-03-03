@@ -82,13 +82,15 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     print('location : $_locationData');
     return MaterialApp(
+
       home: Scaffold(
         appBar: AppBar(
           title: Text('OnTime'),
           backgroundColor: Colors.green[700],
         ),
         floatingActionButton: FloatingActionButton(
-          
+          backgroundColor: Colors.green,
+          child: Icon(Icons.my_location),
           onPressed: () async {
           _circle = {};
           await getUserLocation();
@@ -122,6 +124,7 @@ class _MyAppState extends State<MyApp> {
                 target: _center,
                 zoom: 11.0,
               ),
+              padding: EdgeInsets.only(bottom: 100),
             ),
             Align(
               alignment: Alignment.bottomCenter,

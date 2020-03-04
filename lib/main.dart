@@ -96,6 +96,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(//main Widget that has many Widgets inside
         appBar: AppBar(
           title: Text('On Time'),
@@ -158,7 +159,7 @@ class _MyAppState extends State<MyApp> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: 200,
+                height: 100,
                 child: Visibility(//this Widget make its child appear or disappear, according to variable _visibility.
                   visible: _visibility, //when user click on Marker we update this value to be true or false so it appear or disappear.
                   child: Card(
@@ -176,7 +177,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> getUserLocation() async {
-    
+
     _serviceEnabled = await _location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await _location.requestService();
@@ -194,8 +195,11 @@ class _MyAppState extends State<MyApp> {
     }
 
     _locationData = await _location.getLocation();
-
-    _userPosition = LatLng(_locationData.latitude, _locationData.longitude); //if location is not null will use location, but if it is null use the same old value '_center'
+    if(_userPosition != null ){
+    _userPosition = LatLng(_locationData?.latitude, _locationData?.longitude); //if location is not null will use location, but if it is null use the same old value '_center'
+    } else {
+      _userPosition = _center;
+    }
   }
    
    Future<Uint8List> getUserLocationIcon(context) async {

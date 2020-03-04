@@ -29,7 +29,7 @@ class _BusArrivingTimeState extends State<BusArrivingTime> {
       child: Container(
         child: Column(
           children: <Widget>[
-          Text('This bus arrives at : $_nextBus'),
+          Text('This bus arrives at : $_nextBus', style: TextStyle(fontSize: 20),),
          ],
         ),
       ),
@@ -43,7 +43,7 @@ class _BusArrivingTimeState extends State<BusArrivingTime> {
         var temp = _busTimings.elementAt(i);
         return DateFormat('kk:mm').format(temp);
       }
-      _nextBus = _busTimings.first;// default value if never found next bus time.
+      _nextBus = _busTimings.first; //default value if never found next bus time.
     }
     return _nextBus;
   }

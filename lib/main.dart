@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 
 import 'buttom_page.dart';
@@ -27,7 +26,7 @@ class _MyAppState extends State<MyApp> {
   Uint8List byteData;
   Set<Marker> _markers;
   Set<Circle> _circle;
-  List<String> _randomLocations =
+  List<String> _randomBusLocations =
       '24.86146928,46.69903575,24.88316324,46.69854317,24.93996718,46.76643857,24.6993607,46.56438094,24.69793692,46.69062082,24.63449564,46.69748834,24.79167131,46.59003239,24.80303949,46.72174665,24.63893682,46.72256229,24.7844077,46.84134829,24.67704144,46.79674636,24.64808747,46.6998683,24.6202194,46.71829173,24.73029649,46.67289744,24.82366259,46.63587723,24.93323531,46.66575324,24.80882471,46.56780604,24.71954391,46.76374092,24.62784976,46.7145642'
           .split(',')
           .toList();
@@ -55,9 +54,9 @@ class _MyAppState extends State<MyApp> {
     var _lat, _lon;
     _markers = {};
 
-    for (int i = 0; i < _randomLocations.length - 1; i + 2) {
-      _lat = double.parse(_randomLocations.elementAt(i));
-      _lon = double.parse(_randomLocations.elementAt(++i));
+    for (int i = 0; i < _randomBusLocations.length - 1; i + 2) {
+      _lat = double.parse(_randomBusLocations.elementAt(i));
+      _lon = double.parse(_randomBusLocations.elementAt(++i));
 
       _markers.add(
         Marker(
@@ -82,10 +81,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     print('location : $_locationData');
     return MaterialApp(
-
       home: Scaffold(
         appBar: AppBar(
-          title: Text('OnTime'),
+          title: Text('On Time'),
           backgroundColor: Colors.green[700],
         ),
         floatingActionButton: FloatingActionButton(
@@ -109,9 +107,16 @@ class _MyAppState extends State<MyApp> {
                 strokeWidth: 3,
                 strokeColor: Colors.blue,
                 fillColor: Colors.blue[100],
-                
                 ),
             );
+            _center = _userPosition;
+            mapController.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target: _userPosition,
+                zoom: 14,
+                ),
+                
+            ));
           });
         }),
         body: Stack(
@@ -120,6 +125,7 @@ class _MyAppState extends State<MyApp> {
               circles: Set.of((_circle != null? [_circle.first] : [] )),
               markers: _markers,
               onMapCreated: _onMapCreated,
+              
               initialCameraPosition: CameraPosition(
                 target: _center,
                 zoom: 11.0,

@@ -4,7 +4,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'buttom_page.dart';
 
-void main() => runApp(MyApp());
+void main()  {
+  runApp(MyApp());
+  }
 
 class MyApp extends StatefulWidget {
   @override
@@ -20,7 +22,7 @@ class _MyAppState extends State<MyApp> {
   GoogleMapController _mapController;
   bool _visibility = false;
   LatLng _center = const LatLng(24.774265, 46.738586);
-  LatLng _userPosition;
+  LatLng _userLocation;
   Uint8List byteData;
   Set<Marker> _markers; //"points on map"
   Set<Circle> _circle;
@@ -116,7 +118,7 @@ class _MyAppState extends State<MyApp> {
             _markers.add(
               Marker(
               markerId: MarkerId('userLocation'), //we can use Aaaaannnnnny ID
-              position: _userPosition, //this location is from method above getUserLocation
+              position: _userLocation, //this location is from method above getUserLocation
               icon: BitmapDescriptor.fromBytes(byteData), //Taksim
             ));
 
@@ -124,7 +126,7 @@ class _MyAppState extends State<MyApp> {
             _circle.add(
               Circle(
                 circleId: CircleId('userCircleId'), //we can use Aaaaannnnnny ID
-                center: _userPosition, //same as above
+                center: _userLocation, //same as above
                 radius: 500.0, //ow big is the Circle.
                 strokeWidth: 3, //the line around circle how thick do u want it.
                 strokeColor: Colors.blue, //color of line  around the circle.
@@ -136,7 +138,7 @@ class _MyAppState extends State<MyApp> {
             _mapController.animateCamera(CameraUpdate.newCameraPosition(
               //this is Built-in Widget to move camera
               CameraPosition(
-                target: _userPosition,
+                target: _userLocation,
                 zoom: 14,
                 ),
             ));
@@ -195,10 +197,10 @@ class _MyAppState extends State<MyApp> {
     }
 
     _locationData = await _location.getLocation();
-    if(_userPosition != null ){
-    _userPosition = LatLng(_locationData?.latitude, _locationData?.longitude); //if location is not null will use location, but if it is null use the same old value '_center'
+    if(_userLocation != null ){
+    _userLocation = LatLng(_locationData?.latitude, _locationData?.longitude); //if location is not null will use location, but if it is null use the same old value '_center'
     } else {
-      _userPosition = _center;
+      _userLocation = _center;
     }
   }
    

@@ -19,10 +19,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
   google_maps_flutter:
   intl: ^0.15.8
   mock_data: ^1.2.5
   location: ^2.5.0
+  flutter_launcher_icons: ^0.7.4
+  
+flutter_icons:
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  image_path: "assets/images/bus.png"
+  image_path_ios: "assets/images/bus.png"
+  adaptive_icon_background: "#FFFFFF"
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

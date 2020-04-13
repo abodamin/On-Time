@@ -5,9 +5,19 @@ import 'package:location/location.dart';
 import 'buttom_page.dart';
 
 void main()  {
-  runApp(MyApp());
+  runApp(
+    MainWidget()
+    );
   }
-
+class MainWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home:MyApp()
+      );
+  }
+}
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -77,7 +87,7 @@ class _MyAppState extends State<MyApp> {
       //every Marker must take Id & the following data.
       _markers.add(//here we start adding
         Marker(
-          markerId: MarkerId(i.toString()),//we are creating IDs by taking i and convert it to String (1, 2, 3, ..,etc)
+          markerId: MarkerId(i.toString()),//we are creating IDs by taking i and convert it to String ("1", "2", "3", ..,etc)
           position: LatLng(_lat, _lon),
           infoWindow: InfoWindow(
             title: 'Bus Station $i',
@@ -102,6 +112,21 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(//main Widget that has many Widgets inside
         appBar: AppBar(
           title: Text('On Time'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.info),
+              onPressed: (){
+                showDialog(
+                  context: context,
+                  builder: (context){
+                    return AlertDialog(
+                      title: Text("Bus Timings"),
+                      content: Text("all busses arrive at same time every 15 minutes"),
+                    );
+                  }
+                );
+              })
+          ],
           backgroundColor: Colors.green[700],
         ),
         floatingActionButton: FloatingActionButton( //the Botton in corner.
@@ -145,58 +170,63 @@ class _MyAppState extends State<MyApp> {
           });
         }),
 
-        body: Stack(
-          children: <Widget>[
-            //This is the MAP Widget.
-            GoogleMap(
-              circles: Set.of((_circle != null? [_circle.first] : [] )), //if (_circle != null){ draw the circle as we explained before} else(:) { do nothing }.
-              markers: _markers, //list of markers we created.
-              onMapCreated: _onMapCreated, //here we start taking control of map.
-              initialCameraPosition: CameraPosition(
-                target: _center, //first location is center.
-                zoom: 11.0,
+        body: Container(
+          child: Stack(
+            children: <Widget>[
+              //This is the MAP Widget.
+              GoogleMap(
+                circles: Set.of((_circle != null? [_circle.first] : [] )), //if (_circle != null){ draw the circle as we explained before} else(:) { do nothing }.
+                markers: _markers, //list of markers we created.
+                onMapCreated: _onMapCreated, //here we start taking control of map.
+                initialCameraPosition: CameraPosition(
+                  target: _center, //first location is center.
+                  zoom: 11.0,
+                ),
+                padding: EdgeInsets.only(bottom: 100), //we want the tool bar not to be down and covered by that Bus Time Page.
               ),
-              padding: EdgeInsets.only(bottom: 100), //we want the tool bar not to be down and covered by that Bus Time Page.
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 100,
-                child: Visibility(//this Widget make its child appear or disappear, according to variable _visibility.
-                  visible: _visibility, //when user click on Marker we update this value to be true or false so it appear or disappear.
-                  child: Card(
-                    child: Center(
-                      child: BusArrivingTime(),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: 100,
+                  child: Visibility(//this Widget make its child appear or disappear, according to variable _visibility.
+                    visible: _visibility, //when user click on Marker we update this value to be true or false so it appear or disappear.
+                    child: Card(
+                      child: Center(
+                        child: BusArrivingTime(),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
+  //----------------------------------------
+  //THIS METHOD IS FOR GETTING USER LOCATION
+  //----------------------------------------
   Future<void> getUserLocation() async {
-
-    _serviceEnabled = await _location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await _location.requestService();
-      if (_serviceEnabled) {
+      
+    _serviceEnabled = await _location.serviceEnabled(); //Checks if the location service is enabled.
+    if (!_serviceEnabled) { //if it is not enabled
+      _serviceEnabled = await _location.requestService(); //request from user to activate location
+      if (_serviceEnabled) { //if enabled do nothing
         return;
       }
     }
 
-    _permissionGranted = await _location.hasPermission();
-    if (_permissionGranted == PermissionStatus.DENIED) {
-      _permissionGranted = await _location.requestPermission();
+    _permissionGranted = await _location.hasPermission();//Checks if the app has permission to access location. Returns a [PermissionStatus] object. If the result is [PermissionStatus.DENIED_FOREVER], no dialog will be shown on [requestPermission].
+    if (_permissionGranted == PermissionStatus.DENIED) { //if permission denied
+      _permissionGranted = await _location.requestPermission(); //ask for permission
       if (_permissionGranted != PermissionStatus.GRANTED) {
         return;
       }
     }
 
-    _locationData = await _location.getLocation();
+    _locationData = await _location.getLocation(); //Gets the current location of the user. Returns a [LocationData] object.
     if(_userLocation != null ){
     _userLocation = LatLng(_locationData?.latitude, _locationData?.longitude); //if location is not null will use location, but if it is null use the same old value '_center'
     } else {
@@ -204,8 +234,9 @@ class _MyAppState extends State<MyApp> {
     }
   }
    
+   //THIS IS THE ICON OF THE USER'S LOCATION 
    Future<Uint8List> getUserLocationIcon(context) async {
-    var temp = await DefaultAssetBundle.of(context).load('assets/images/user_location.png');
+    var temp = await DefaultAssetBundle.of(context).load('assets/images/user_location.png');//this is the path for the icon
     return temp.buffer.asUint8List();
   }
 }

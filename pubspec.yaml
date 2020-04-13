@@ -24,8 +24,9 @@ dependencies:
   intl: ^0.15.8
   mock_data: ^1.2.5
   location: ^2.5.0
+  latlong: ^0.6.1
   flutter_launcher_icons: ^0.7.4
-  
+   
 flutter_icons:
   android: true # can specify file name here e.g. "ic_launcher"
   ios: true # can specify file name here e.g. "My-Launcher-Icon"

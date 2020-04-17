@@ -17,7 +17,7 @@ class _BusArrivingTimeState extends State<BusArrivingTime> {
   @override
   void initState() {
     _currentTime = DateTime.now(); //take the current time
-    print('_currentTime : $_currentTime');//just print it
+    debugPrint('_currentTime : $_currentTime');//just print it
     _generateBusArrivingTimes(_startingTime); //automatically will be assigned to mockTimes.
     _nextBus = _getNextBusTime();
     super.initState();
